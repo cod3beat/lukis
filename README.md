@@ -81,9 +81,8 @@ This application is still at it's early stage. So, ofcourse there are a lot of t
 - [ ] Improve the architecture
 - [x] Start Unit test
 - [x] Use PhantomJS to run unit tests (with the help of testem)
-- [ ] Widgets on demand (show and hide when needed)
-- [ ] Performance
 - [ ] Shapes
 - [ ] More Brushes
 - [ ] Canvas Manipulation
-- [ ] Other crazy stuffs
+- [] Responsive Design
+- [] Collaborative Painting
