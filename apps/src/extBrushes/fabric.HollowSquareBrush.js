@@ -1,7 +1,7 @@
-define(function(require){
+define(function(require) {
 
-  var fabric = require("fabric"),
-      RectBrushClass = require("extBrushes/fabric.RectBrush"),
+  var fabric = require('fabric'),
+      RectBrushClass = require('extBrushes/fabric.RectBrush'),
       getRandomInt = fabric.util.getRandomInt;
 
 
@@ -15,7 +15,7 @@ define(function(require){
      * @param  {Object} pointer pointer location
      * @return {fabric.Point}         Point
      */
-    addPoint: function(pointer){
+    addPoint: function(pointer) {
       var pointerPoint = new fabric.Point(pointer.x, pointer.y);
 
       // generate random circle's radius
@@ -35,7 +35,7 @@ define(function(require){
       return pointerPoint;
     },
 
-    drawRect: function ( pointer ) {
+    drawRect: function (pointer) {
       var point = this.addPoint(pointer);
       var ctx = this.canvas.contextTop;
       
@@ -46,7 +46,7 @@ define(function(require){
       ctx.stroke();
     },
 
-    onMouseUp: function(){
+    onMouseUp: function() {
       var originalRenderOnAddition = this.canvas.renderOnAddition;
       this.canvas.renderOnAddition = false;
 
@@ -59,13 +59,18 @@ define(function(require){
           height: point.height,
           left: point.x,
           top: point.y,
+          originX: 'center',
+          originY: 'center',
           fill: null,
           stroke: point.strokeColor,
           strokeWidth: 1
         }));
       }
 
-      var group = new fabric.Group(rects);
+      var group = new fabric.Group(rects, {
+        originX: 'center',
+        originY: 'center'
+      });
 
       this.canvas.add(group);
       this.canvas.fire('path:created', { path: group });

@@ -1,7 +1,7 @@
 /**
  * I know whats needed to draw a free hand
  */
-define(function(require){
+define(function(require) {
 
   var fabric = require('fabric'),
       brushDistance = require('extBrushes/fabric.BrushDistance'),
@@ -11,20 +11,8 @@ define(function(require){
 
   function withFreeHandPainter() {
 
-    this.defaultAttrs({
-      /**
-       * Canvas instance hold by this mixin
-       * @type {Object}
-       */
-      mixinCanvas: undefined,
-
-      /**
-       * The brush to use for painting
-       * @type {Object}
-       */
-      activeBrush: undefined,
-
-    });
+    var freehandCanvas,
+        activeBrush;
 
     this.after('initialize', function() {
       // a brush is served
@@ -34,7 +22,7 @@ define(function(require){
 
       // brush property has been updated by the brush manager
       this.on('brushProperty-updated', function(e, data) {
-        // TODO I'm not sure if this is a good approach
+        // TODO find a better way for this property assignments
         if (data.key === 'width') {
           this.setBrushWidth(data.newValue);  
         } else if (data.key === 'fillColor' || data.key === 'strokeColor') {
@@ -53,14 +41,15 @@ define(function(require){
      * @param  {Object} brush  The custom brush to use. If not provided, then
      *                         we use the one saved by this mixin
      */
-    this.startFreehandPainting = function( canvas, brush ) {
+    this.startFreehandPainting = function(canvas, brush) {
       // brush that will be used for this painting session
-      var usedBrush = brush || this.attr.activeBrush;
+      var usedBrush = brush || activeBrush;
 
       if (usedBrush) {
-        this.attr.mixinCanvas = canvas;
+        // the canvas
+        freehandCanvas = canvas;
         // state that we are in drawing mode
-        this.attr.mixinCanvas.isDrawingMode = true;
+        freehandCanvas.isDrawingMode = true;
         this.setupFreehandPaintingProperty(usedBrush);  
       }
     };
@@ -69,15 +58,16 @@ define(function(require){
      * Setting up freehand brush properties for painting
      * @param  {Object} brush The brush
      */
-    this.setupFreehandPaintingProperty = function( brush ) {
+    this.setupFreehandPaintingProperty = function(brush) {
+      // getting the brush that's going to be used
       var freeDrawingBrush = brush.getBrush();
       // setting the property for this painting session
       freeDrawingBrush.color = brush.get('fillColor');
       freeDrawingBrush.width = brush.get('width');
       // set this brush to the canvas' freeDrawingBrush property
       // this brush will be used by the canvas to draw freehand
-      this.attr.mixinCanvas.freeDrawingBrush = freeDrawingBrush;
-      // TODO if there's time, we should think of a better way
+      freehandCanvas.freeDrawingBrush = freeDrawingBrush;
+      // TODO we should think of a better way
       // to change canvas' default painting behaviour
       // 
       // Do some hijaking. this is manipulating canvas' original
@@ -90,8 +80,8 @@ define(function(require){
      * Stop painting
      */
     this.stopFreehandPainting = function() {
-      if (this.attr.mixinCanvas) {
-        this.attr.mixinCanvas.isDrawingMode = false;  
+      if (freehandCanvas) {
+        freehandCanvas.isDrawingMode = false;  
       }
     };
 
@@ -99,27 +89,31 @@ define(function(require){
      * Setting brush instance to use for painting
      * @param {Object} brush The brush
      */
-    this.setBrush = function( brush ) {
-      this.attr.activeBrush = brush;
+    this.setBrush = function(brush) {
+      activeBrush = brush;
 
       // if we are currently in drawing mode, we need to update
       // the brush that is used by the canvas
-      if (this.attr.mixinCanvas && this.attr.mixinCanvas.isDrawingMode) {
+      if (freehandCanvas && freehandCanvas.isDrawingMode) {
         this.setupFreehandPaintingProperty(brush);
       }
+    };
+
+    this.getBrush = function() {
+      return activeBrush;
     };
 
     /**
      * Update brush width
      * @param {Integer} width Width
      */
-    this.setBrushWidth = function( width ) {
-      this.attr.activeBrush.set('width', width);
+    this.setBrushWidth = function(width) {
+      activeBrush.set('width', width);
 
       // if we are in drawing mode, we need to update the width property
       // of the currently active brush
-      if (this.attr.mixinCanvas && this.attr.mixinCanvas.isDrawingMode) {
-        this.attr.mixinCanvas.freeDrawingBrush.width = width;
+      if (freehandCanvas && freehandCanvas.isDrawingMode) {
+        freehandCanvas.freeDrawingBrush.width = width;
       }
     };
 
@@ -127,26 +121,34 @@ define(function(require){
      * Setting brush color
      * @param {String} color Color
      */
-    this.setBrushColor = function( color ) {
-      this.attr.activeBrush.set('fillColor', color);
+    this.setBrushColor = function(color) {
+      activeBrush.set('fillColor', color);
 
       // if we are in drawing mode, we need to update the color property
       // of the currently active brush
-      if (this.attr.mixinCanvas && this.attr.mixinCanvas.isDrawingMode) {
-        this.attr.mixinCanvas.freeDrawingBrush.color = color;
+      if (freehandCanvas && freehandCanvas.isDrawingMode) {
+        freehandCanvas.freeDrawingBrush.color = color;
       }
     };
 
     // TODO find a way to inject plugin that changes canvas' default
     // painting behaviour
-    this.setBrushDistance = function( distance ) {
+    this.setBrushDistance = function(distance) {
       brushDistance.setDistance(distance);
     };
 
     // TODO find a way to inject plugin that changes canvas' default
     // painting behaviour
-    this.setSensitivity = function( sensitivity ) {
+    this.setSensitivity = function(sensitivity) {
       brushSensitivity.setSensitivity(sensitivity);
+    };
+
+    this.setFreehandCanvas = function(canvas) {
+      freehandCanvas = canvas;
+    };
+
+    this.getFreehandCanvas = function() {
+      return freehandCanvas;
     };
 
   }

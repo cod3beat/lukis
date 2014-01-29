@@ -1,6 +1,6 @@
-define(function( require ) {
+define(function(require) {
 
-  var fabric = require("fabric"),
+  var fabric = require('fabric'),
       getRandomInt = fabric.util.getRandomInt;
 
   var HollowCircleBrushClass = fabric.util.createClass(fabric.BaseBrush, {
@@ -29,7 +29,7 @@ define(function( require ) {
      * @param  {Object} pointer pointer location
      * @return {fabric.Point}         Point
      */
-    addPoint: function(pointer){
+    addPoint: function(pointer) {
       var pointerPoint = new fabric.Point(pointer.x, pointer.y);
 
       // generate random circle's radius
@@ -49,7 +49,7 @@ define(function( require ) {
       return pointerPoint;
     },
 
-    drawCircle: function ( pointer ) {
+    drawCircle: function (pointer) {
       var point = this.addPoint(pointer);
       var ctx = this.canvas.contextTop;
 
@@ -70,11 +70,11 @@ define(function( require ) {
       this.drawCircle(pointer);
     },
 
-    onMouseMove: function( pointer ) {
+    onMouseMove: function(pointer) {
       this.drawCircle(pointer);
     },
 
-    onMouseUp: function(){
+    onMouseUp: function() {
       var originalRenderOnAddition = this.canvas.renderOnAddition;
       this.canvas.renderOnAddition = false;
 
@@ -87,12 +87,17 @@ define(function( require ) {
           left: point.x,
           top: point.y,
           fill: null,
+          originX: 'center',
+          originY: 'center',
           stroke: point.strokeColor,
           strokeWidth: 1
         }));
       }
 
-      var group = new fabric.Group(circles);
+      var group = new fabric.Group(circles, {
+        originX: 'center',
+        originY: 'center'
+      });
 
       this.canvas.add(group);
       this.canvas.fire('path:created', { path: group });

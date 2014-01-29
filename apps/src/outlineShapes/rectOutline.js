@@ -2,52 +2,55 @@
  * Draw a rectangular outline as the user is drawing on
  * top of the canvas
  */
-define(function( require ) {
+define(function(require) {
 
-  var asOutlineShape = require("./asOutlineShape");
+  var asOutlineShape = require('./asOutlineShape');
 
-  function getBoundaryPoint( point, xLength, yHeight, distance ) {
+  function getBoundaryPoint(point, xLength, yHeight, distance) {
     var x = point.x,
         y = point.y,
         points = [];
     // top
-    for (var iter = x + distance; iter < xLength; iter+= distance){
+    for (var iter = x + distance; iter < xLength; iter += distance) {
       points.push({x: iter, y: y});
     }
 
     // get left
-    for (iter = y; iter < yHeight; iter += distance){
+    for (iter = y; iter < yHeight; iter += distance) {
       points.push({x: x, y: iter});
     }
 
     // get bottom
-    for (iter = x; iter < xLength; iter += distance){
+    for (iter = x; iter < xLength; iter += distance) {
       points.push({x: iter, y: yHeight});
     }
 
     // get right
-    for (iter = yHeight; iter >= y; iter -= distance){
+    for (iter = yHeight; iter > y; iter -= distance) {
       points.push({x: xLength, y: iter});
     }
 
     return points;
   }
 
-  function RectOutline(canvas, cfg){
+  function RectOutline(canvas, cfg) {
     this.initialize(canvas, cfg);
   }
 
-  RectOutline.prototype.getOutlinePoints = function(pointDistance){
-    if (pointDistance < 0) {
-      return this.outline;
-    }
-    
+  RectOutline.prototype.getOutlinePoints = function(pointDistance) {
     var xLength = this.outline.x + this.outline.width,
         yHeight = this.outline.y + this.outline.height,
         x = this.outline.x,
         y = this.outline.y;
     
-    return getBoundaryPoint({x: x, y: y}, xLength, yHeight, pointDistance);
+    var points = getBoundaryPoint({x: x, y: y}, xLength, yHeight, pointDistance);
+    // this is a need hack (at the moment), so that we can draw
+    // a shape for pencil brush
+    // please see `pencil.js` `drawAtPoints` method
+    points[0].type = 'Rect';
+    points[0].outline = this.outline;
+
+    return points;
   };
 
   RectOutline.prototype.onMouseDown = function(e) {
@@ -77,7 +80,8 @@ define(function( require ) {
     return this;
   };
 
-  RectOutline.prototype.updateOutline = function( point ) {
+  // TODO can we improve this?
+  RectOutline.prototype.updateOutline = function(point) {
     this.outline.height = point.y - this.outline.y;
     this.outline.width = point.x - this.outline.x;
 
@@ -89,7 +93,7 @@ define(function( require ) {
   };
 
   RectOutline.prototype.normalizeOutlinePosition = function() {
-    if (this.outline.width < 0){
+    if (this.outline.width < 0) {
       this.outline.x = this.outline.x + this.outline.width;
       this.outline.width *= -1;
     }

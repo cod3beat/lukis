@@ -2,13 +2,13 @@
  * A module that is able to draw a circle brush on top of
  * fabric's canvas
  */
-define(function(require){
+define(function(require) {
   
-  var fabric = require("fabric"),
+  var fabric = require('fabric'),
       getRandomInt = fabric.util.getRandomInt,
-      asBrush = require("./asBrush");
+      asBrush = require('./asBrush');
 
-  function CircleBrush(canvas, cfg){
+  function CircleBrush(canvas, cfg) {
     this.initialize(canvas, cfg);
   }
 
@@ -16,7 +16,7 @@ define(function(require){
     this.brush = new fabric.CircleBrush(this.canvas);
   };
 
-  CircleBrush.prototype.drawOne = function( point ) {
+  CircleBrush.prototype.drawOne = function(point) {
     return new fabric.Circle({
       radius: getRandomInt(0, this.cfg.width),
       left: point.x,
@@ -30,14 +30,7 @@ define(function(require){
     });
   };
 
-  CircleBrush.prototype.processObjects = function( objects ) {
-    var group = new fabric.Group(objects);
-
-    this.canvas.add(group);
-    this.canvas.fire('path:created', { path: group });
-  };
-
-  CircleBrush.prototype.drawAtPoints = function( points ) {
+  CircleBrush.prototype.drawAtPoints = function(points) {
     var originalRenderOnAddition = this.canvas.renderOnAddition;
         this.canvas.renderOnAddition = false;
 

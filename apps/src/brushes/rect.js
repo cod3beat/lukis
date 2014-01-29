@@ -1,11 +1,11 @@
-define(function(require){
+define(function(require) {
 
-  var fabric = require("fabric"),
-      RectBrushClass = require("extBrushes/fabric.RectBrush"),
+  var fabric = require('fabric'),
+      RectBrushClass = require('extBrushes/fabric.RectBrush'),
       getRandomInt = fabric.util.getRandomInt,
-      asBrush = require("./asBrush");
+      asBrush = require('./asBrush');
 
-  function RectBrush(canvas, cfg){
+  function RectBrush(canvas, cfg) {
     this.initialize(canvas, cfg);
   }
 
@@ -26,13 +26,6 @@ define(function(require){
       hasRotatingPoint: false,
       lockUniScaling: true
     });
-  };
-
-  RectBrush.prototype.processObjects = function( objects ) {
-    var group = new fabric.Group(objects);
-
-    this.canvas.add(group);
-    this.canvas.fire('path:created', { path: group });
   };
 
   RectBrush.prototype.drawAtPoints = function( points ) {

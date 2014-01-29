@@ -1,9 +1,9 @@
-define(function(require){
+define(function(require) {
 
-  var fabric = require("fabric"),
+  var fabric = require('fabric'),
       getRandomInt = fabric.util.getRandomInt,
-      HollowCircleBrushClass = require("extBrushes/fabric.HollowCircleBrush"),
-      asBrush = require("./asBrush");
+      HollowCircleBrushClass = require('extBrushes/fabric.HollowCircleBrush'),
+      asBrush = require('./asBrush');
 
   function HollowCircleBrush(canvas, cfg) {
     this.initialize(canvas, cfg);
@@ -13,7 +13,7 @@ define(function(require){
     this.brush = new HollowCircleBrushClass(this.canvas);
   };
 
-  HollowCircleBrush.prototype.drawOne = function( point ) {
+  HollowCircleBrush.prototype.drawOne = function(point) {
     return new fabric.Circle({
       radius: getRandomInt(0, this.cfg.width),
       left: point.x,
@@ -26,14 +26,7 @@ define(function(require){
     });
   };
 
-  HollowCircleBrush.prototype.processObjects = function( objects ) {
-    var group = new fabric.Group(objects);
-
-    this.canvas.add(group);
-    this.canvas.fire('path:created', { path: group });
-  };
-
-  HollowCircleBrush.prototype.drawAtPoints = function( points ) {
+  HollowCircleBrush.prototype.drawAtPoints = function(points) {
     var originalRenderOnAddition = this.canvas.renderOnAddition;
         this.canvas.renderOnAddition = false;
 

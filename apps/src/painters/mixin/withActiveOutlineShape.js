@@ -1,20 +1,20 @@
 /**
  * I know what the current active outlineShape is
  */
-define(function(require){
+define(function(require) {
 
   return withActiveOutlineShape;
 
-  function withActiveOutlineShape(){
+  function withActiveOutlineShape() {
     var activeOutlineShape;
 
-    this.after("initialize", function(){
+    this.after('initialize', function() {
 
-      this.on("activeOutlineShape-changed", function(e, data){
+      this.on('activeOutlineShape-changed', function(e, data) {
         this.requestOutlineShapeInstance(data.id);
       }.bind(this));
 
-      this.on("brushProperty-updated", function(e, data){
+      this.on('brushProperty-updated', function(e, data) {
         this.updateActiveOutlineShapeProperty(data.key, data.newValue);
       }.bind(this));
 
@@ -24,16 +24,19 @@ define(function(require){
      * Request outlineShape instance
      * @param  {String} id OutlineShape ID
      */
-    this.requestOutlineShapeInstance = function(id){
-      this.on("outlineShape-served", this.onOutlineShapeServed);
-
-      this.trigger("request-outlineShape", {
+    this.requestOutlineShapeInstance = function(id) {
+      // we need to attach this event handler here, so that
+      // once the ourline shape has been served, we can process
+      // it correctly
+      this.on('outlineShape-served', this.onOutlineShapeServed);
+      // requesting for this outline shape
+      this.trigger('request-outlineShape', {
         id: id
       });
     };
 
     this.onOutlineShapeServed = function(e, data) {
-      this.off("outlineShape-served", this.onOutlineShapeServed);
+      this.off('outlineShape-served', this.onOutlineShapeServed);
       this.setActiveOutlineShapeInstance(data.outlineShape);
     };
 
@@ -43,7 +46,7 @@ define(function(require){
      */
     this.setActiveOutlineShapeInstance = function(outlineShape) {
       activeOutlineShape = outlineShape;
-      this.trigger("activeOutlineShape-ready", {
+      this.trigger('activeOutlineShape-ready', {
         activeOutlineShape: outlineShape
       });
     };
@@ -52,7 +55,7 @@ define(function(require){
      * Get the current active outlineShape
      * @return {Object} Active outlineShape
      */
-    this.getActiveOutlineShape = function(){
+    this.getActiveOutlineShape = function() {
       return activeOutlineShape;
     };
 

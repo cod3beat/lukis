@@ -1,8 +1,8 @@
-define(function( require ) {
+define(function(require) {
 
-  var asOutlineShape = (function(){
+  var asOutlineShape = (function() {
 
-    function initialize ( canvas, cfg ) {
+    function initialize (canvas, cfg) {
       this.canvas = canvas;
       this.canvas.selection = false;
 
@@ -10,19 +10,19 @@ define(function( require ) {
       this.outline = {};
 
       cfg = cfg || {};
-      cfg.strokeColor = cfg.strokeColor || "#000000";
+      cfg.strokeColor = cfg.strokeColor || '#000000';
       this.cfg = cfg;
     }
 
     function start() {
-      this.canvas.defaultCursor = "crosshair";
+      this.canvas.defaultCursor = 'crosshair';
     }
 
-    function set( key, value ) {
+    function set(key, value) {
       this.cfg[key] = value;
     }
 
-    function get( key ) {
+    function get(key) {
       return this.cfg[key];
     }
 
@@ -31,7 +31,7 @@ define(function( require ) {
     }
 
     function onMouseUp() {
-      this.canvas.defaultCursor = "default";
+      this.canvas.defaultCursor = 'default';
     
       this.isDrawing = false;
       this.canvas.selection = true;
@@ -47,7 +47,7 @@ define(function( require ) {
       this.canvas.clearContext(this.canvas.contextTop);
       this.canvas.selection = true;
 
-      this.canvas.defaultCursor = "default";
+      this.canvas.defaultCursor = 'default';
       return this;
     }
 
