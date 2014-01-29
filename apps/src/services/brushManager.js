@@ -56,7 +56,6 @@ define(function(require){
 
     this.after("initialize", function(){
       this.attachEventListeners();
-      this.requestCanvas();
     });
 
     /**
@@ -64,7 +63,7 @@ define(function(require){
      * @return {[type]} [description]
      */
     this.attachEventListeners = function(){
-      this.on("canvas-served", function(e, data){
+      this.on("canvas-ready", function(e, data){
         this.setCanvas(data.id, data.canvas);
       }.bind(this));
 
@@ -76,16 +75,12 @@ define(function(require){
 
       this.on("request-brushProperties", function(){
         this.publishBrushProperties();
-      });
+      }.bind(this));
 
       this.on("request-brush", function(e, data){
         this.requestBrush(data.id);
-      });
+      }.bind(this));
       
-    };
-
-    this.requestCanvas = function(){
-      this.trigger("request-canvas");
     };
 
     /**

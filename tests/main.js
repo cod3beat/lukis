@@ -2,7 +2,7 @@ require.config({
   baseUrl: "../apps/src",
 
   paths: {
-    fabric: "canvas-lib/fabric",
+    fabric: "../libs/fabric.1.4.0",
     text: "../../vendor/requirejs-text/text",
     mustache: "../../vendor/mustache/mustache"
   },
@@ -32,9 +32,9 @@ require(
   "specs/dataServices/brushlistSpec.js",
   "specs/dataServices/paintWidgetListSpec.js",
   "specs/painters/lukisSpec",
-  "specs/painters/withCanvasEventsSpec",
-  "specs/painters/withBrushPainterSpec",
-  "specs/painters/withOutlinePainterSpec",
+  "specs/painters/mixin/withCanvasEventsSpec",
+  "specs/painters/mixin/withBrushPainterSpec",
+  "specs/painters/mixin/withOutlinePainterSpec",
   "specs/ui/paintWidget/paintWidgetsSpec"
 ],
 

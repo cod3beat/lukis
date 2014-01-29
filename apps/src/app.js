@@ -13,6 +13,7 @@ define(function(require){
       canvasManipulationWidget = require("ui/canvasManipulationWidget/canvasManipulationWidget"),
       brushSizeWidget = require("ui/brushSizeWidget/brushSizeWidget"),
       brushDistanceWidget = require("ui/brushDistanceWidget/brushDistanceWidget"),
+      brushSensitivityWidget = require("ui/brushSensitivityWidget/brushSensitivityWidget"),
       imageCanvasWidget = require("ui/imageCanvasWidget/imageCanvasWidget"),
       freehandWidget = require("ui/freehandWidget/freehandWidget"),
       colorWidget = require("ui/colorWidget/colorWidget"),
@@ -40,9 +41,6 @@ define(function(require){
   }
 
   Application.prototype.start = function() {
-    canvas.attachTo(document, {
-      id: "lukis"
-    });
     /**
      * Any components that needs to hold a reference
      * to canvas instance and canvas element, should be
@@ -56,6 +54,7 @@ define(function(require){
 
     brushSizeWidget.attachTo("#sizerange");
     brushDistanceWidget.attachTo("#brushdistance");
+    brushSensitivityWidget.attachTo("#brushsensitivity");
     colorWidget.attachTo("#colorpicker");
     brushPanelWidget.attachTo("#brushes");
     notification.attachTo("#status-bar");
@@ -85,6 +84,20 @@ define(function(require){
     brushList.attachTo(document);
     paintWidgetList.attachTo(document);
     canvasManipulationList.attachTo(document);
+
+    /**
+     * The canvas service is setup down here. After it has
+     * been initialized, it'll publish canvas-ready event,
+     * which also publishes canvas instance and it's ID
+     */
+    canvas.attachTo(document, {
+      id: "lukis",
+      canvasAttrs: {
+        backgroundColor: "#ECF0F1",
+        interactive: true,
+        selection: true  
+      }
+    });
   };
 
   return Application;

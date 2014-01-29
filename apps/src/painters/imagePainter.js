@@ -4,9 +4,9 @@
 define(function(require){
 
   var defineComponent = require("flight/lib/component"),
-      withImagePainter = require("painters/withImagePainter"),
-      withOutlinePainter = require("painters/withOutlinePainter"),
-      withCanvasEvents = require("painters/withCanvasEvents"),
+      withImagePainter = require("painters/mixin/withImagePainter"),
+      withOutlinePainter = require("painters/mixin/withOutlinePainter"),
+      withCanvasEvents = require("painters/mixin/withCanvasEvents"),
       RectOutline = require("outlineShapes/rectOutline");
 
   return defineComponent(imagePainter, withImagePainter, withCanvasEvents, withOutlinePainter);
@@ -28,15 +28,7 @@ define(function(require){
 
     this.after("initialize", function(){
       this.attachEventListener();
-      this.requestCanvas();
     });
-
-    /**
-     * Request canvas
-     */
-    this.requestCanvas = function(){
-      this.trigger("request-canvas");
-    };
 
     /**
      * Set the canvas
@@ -51,7 +43,7 @@ define(function(require){
      * Add event handlers for interesting events
      */
     this.attachEventListener = function(){
-      this.on("canvas-served", function(e, data){
+      this.on("canvas-ready", function(e, data){
         this.setCanvas(data.canvas);
       }.bind(this));
 

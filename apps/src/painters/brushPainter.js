@@ -7,15 +7,15 @@
 define(function(require){
   var fabric = require("fabric"),
       defineComponent = require("flight/lib/component"),
-      withCanvasEvents = require("painters/withCanvasEvents"),
-      withBrushPainter = require("painters/withBrushPainter"),
-      withOutlinePainter = require("painters/withOutlinePainter"),
-      withActiveBrush = require("painters/withActiveBrush"),
-      withActiveOutlineShape = require("painters/withActiveOutlineShape");
+      withCanvasEvents = require("painters/mixin/withCanvasEvents"),
+      withBrushPainter = require("painters/mixin/withBrushPainter"),
+      withOutlinePainter = require("painters/mixin/withOutlinePainter"),
+      withActiveBrush = require("painters/mixin/withActiveBrush"),
+      withActiveOutlineShape = require("painters/mixin/withActiveOutlineShape");
 
-  return defineComponent(Lukis, withCanvasEvents, withBrushPainter, withOutlinePainter, withActiveBrush, withActiveOutlineShape);
+  return defineComponent(brushPainter, withCanvasEvents, withBrushPainter, withOutlinePainter, withActiveBrush, withActiveOutlineShape);
 
-  function Lukis() {
+  function brushPainter() {
 
     this.defaultAttrs({
 
@@ -28,7 +28,6 @@ define(function(require){
 
     this.after("initialize", function() {
       this.attachEventListeners();
-      this.requestCanvas();
     });
 
     this.attachEventListeners = function() {
@@ -36,7 +35,7 @@ define(function(require){
         this.requestBrush(data.brushes[0].id);
       });
 
-      this.on("canvas-served", function( e, data ) {
+      this.on("canvas-ready", function( e, data ) {
         this.setupCanvas(data.canvas);
       }.bind(this));
 
@@ -50,13 +49,6 @@ define(function(require){
       this.on("paintWidget-clicked", function( e, data ) {
         this.requestOutlineShape(data.paintWidgetId);
       }.bind(this));
-    };
-
-    /**
-     * Requesting for canvas instance
-     */
-    this.requestCanvas = function() {
-      this.trigger("request-canvas");
     };
 
     /**
