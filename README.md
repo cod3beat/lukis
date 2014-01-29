@@ -36,6 +36,21 @@ To run the test, just type the command below on your console:
 
 > karma start
 
+## Building
+
+To build, run:
+
+> r.js -o apps/src/app.build.js
+
+**The next steps is not very efficient. Need to find a better way**
+
+The above script will build the app and place the build file inside `build`. Then, we should make a couple of changes to `build/index.html`:
+
+1. Add `<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">` to `<head>`
+2. Changed the loaded script to `<script src="src/main.js"></script>`
+
+You can see [the index.html from gh-pages branch](https://github.com/keripix/lukis/blob/gh-pages/build/index.html) to see how the changes take place.
+
 ## About folder structure
 
 The sources are placed inside `apps`.
@@ -86,3 +101,4 @@ This application is still at it's early stage. So, ofcourse there are a lot of t
 - [ ] Canvas Manipulation
 - [] Responsive Design
 - [] Collaborative Painting
+- [] Better build process. More automatic
